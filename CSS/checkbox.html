@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  .checkbox-wrap {
+    width: 90%;
+    position: relative;
+    margin: 0 auto;
+    top: 30%;
+    height: 40%;
+    background-color: white;
+  }
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  input[type="checkbox"]+label {
+    display: inline-block;
+    width: 48%;
+    margin-top: 10px;
+    margin-left: 5px;
+    text-align: left;
+  }
+
+  label::before {
+    content: "";
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border: 1px solid #409eff;
+    border-radius: 1px;
+    vertical-align: middle;
+    margin-right: 5px;
+    transition: background ease-in .3s;
+  }
+
+  input[type="checkbox"]:checked+label::before {
+    content: '\2714';
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #409eff;
+  }
+</style>
+
+<body>
+  <div class="checkbox-wrap">
+    <input type="checkbox" id="guangpan">
+    <label for="guangpan">努力光盘得得</label>
+  </div>
+</body>
+
+</html>

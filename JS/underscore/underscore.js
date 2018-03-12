@@ -83,6 +83,150 @@
 		return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
 	}
 
+	_.isFunction = function(obj) {
+		return typeof obj === 'function' || false;
+	}
+
+	// 告诉你properties中的键和值是否包含在object中
+	// var stooge = {name: 'moe', age: 32}; _.isMatch(stooge, {age: 32}); => true
+	_.isMatch = function(object, attrs) {
+		var keys = _.keys(attrs), length = keys.length;
+		if (object == null) return !length;
+		var obj = Object(object);
+		for (var i = 0; i < length; i++) {
+			var key = keys[i];
+			if (attrs[key] !== obj[key] || !(key in obj)) return false;
+		}
+		return true;
+	}
+
+	// 对象是否包含给定的键吗？等同于object.hasOwnProperty(key)，但是使用hasOwnProperty 函数的一个安全引用，以防意外覆盖。
+	_.has = function(obj, key) {
+		return obj != null && hasOwnProperty.call(obj, key);
+	};
+
+	// 返回object对象所有的属性值（数组形式）。
+	_.values = function(obj) {
+		var keys = _.keys(obj); 
+		var length = keys.length;
+		var values = Array.length;
+		for (var i = 0; i < length; i++) {
+			values[i] = obj[keys[i]];
+		}
+		return values;
+	}
+
+	var property = function(key) {
+		return function(obj) {
+			return obj == null ? void 0 : obj[key];
+		}
+	}
+
+	// _.property(key) 
+	// 返回一个函数，这个函数返回任何传入的对象的key属性。
+	// var stooge = {name: 'moe'}; 'moe' === _.property('name')(stooge); => true
+	_.property = property;
+
+	// 返回与传入参数相等的值. 相当于数学里的: f(x) = x
+	// 这个函数看似无用, 但是在Underscore里被用作默认的迭代器iterator.
+	// var stooge = {name: 'moe'}; stooge === _.identity(stooge); => true
+	_.identity = function(value) {
+		return value;
+	}
+
+	// 用于创建分配函数的内部函数。
+	var createAssigner = function(keysFunc, undefinedOnly) {
+		console.log(keysFunc);
+		return function(obj) {
+			console.log(keysFunc);
+			var length = arguments.length;
+			if (length < 2 || obj == null) return obj;
+			for (var index = 1; index < length; index++) {
+				var source = arguments[index],
+					keys = keysFunc(source),
+					l = keys.length;
+				for (var i = 0; i < 1; i++) {
+					var key = keys[i];
+					if (!undefinedOnly || obj[key] === void 0) obj[key] = source[key];
+				}
+			}
+			return obj;
+		}
+	}
+
+	// 复制source对象中的所有属性覆盖到destination对象上，并且返回 destination 对象. 
+	// 复制是按顺序的, 所以后面的对象属性会把前面的对象属性覆盖掉(如果有重复).
+	_.extend = createAssigner(_.allKeys);
+
+	// 类似于 extend, 但只复制自己的属性覆盖到目标对象。（注：不包括继承过来的属性）
+	_.extendOwn = _.assign = createAssigner(_.keys);
+
+	// 返回一个断言函数，这个函数会给你一个断言可以用来辨别给定的对象是否匹配attrs指定键/值属性。
+	// var ready = _.matcher({selected: true, visible: true});
+  // var readyToGoList = _.filter(list, ready);
+	_.matcher = _.matches = function(attrs) {
+		attrs = _.extendOwn({}, attrs);
+		console.log(attrs);
+		return function(obj) {
+			return _.isMatch(obj, attrs);
+		}
+	}
+
+	// A mostly-internal function to generate callbacks that can be applied
+  // to each element in a collection, returning the desired result — either
+  // identity, an arbitrary callback, a property matcher, or a property accessor.
+	// 一个大多数内部函数，用于生成可以应用到集合中的每个元素的回调函数，
+	// 返回所需的结果——要么是标识，要么是任意回调，要么是属性匹配器，要么是属性访问器。
+	var cb = function(value, context, argCount) {
+		if (value == null) return _.identity;
+		if (_.isFunction(value)) return optimizeCb(value, context, argCount);
+		if(_isObject(value)) return _.matcher(value);
+		return _.property(value);
+	}
+
+  // Generator function to create the findIndex and findLastIndex functions
+	function createPredicateIndexFinder(dir) {
+		return function(array, predicate, context) {
+			predicate = cb(predicate, context); // 返回的是函数
+			var length = getLength(array);
+			var index = dir > 0 ? 0 : length - 1;
+			for(; index >=0 && index < length; index+= dir) {
+				if(predicate(array[index], index, array)) return index;
+			}
+			return -1;
+		}
+	}
+
+	// _.findIndex(array, predicate, [context])
+	// 类似于_.indexOf，当predicate通过真检查时，返回第一个索引值；否则返回-1。
+	// var objArr = [{id:1, name:'jiankian'}, {id:23, name:'anan'}, {id:188, name:'superme'}, {id:233, name:'jobs'}, {id:288, name:'bill', age:89}, {id:333}] ;
+	// var ret2 = objArr.findIndex((v) => { return v.id == 233; });
+	_.findIndex = createPredicateIndexFinder(1);
+	_.findLastIndex = createPredicateIndexFinder(-1);
+
+	// Generator function to create the indexOf and lastIndexOf functions
+	function createIndexFinder(dir, predicateFind, sortedIndex) {
+		return function(array, item, idx) {
+			var i = 0, length = getLength(array);
+			// TODO: 
+		}
+	}
+
+	// _.indexOf(array, value, [isSorted]) 
+	// 返回value在该 array 中的索引值，如果value不存在 array中就返回-1。使用原生的indexOf 函数，除非它失效。
+	// 如果您正在使用一个大数组，你知道数组已经排序，传递true给isSorted将更快的用二进制搜索..,
+	// 或者，传递一个数字作为第三个参数，为了在给定的索引的数组中寻找第一个匹配值。
+	_.indexOf = createIndexFinder(1, _.findIndex, _.sortedIndex);
+
+
+	// 如果list包含指定的value则返回true（愚人码头注：使用===检测）。
+	// 如果list 是数组，内部使用indexOf判断。使用fromIndex来给定开始检索的索引位置。
+	_.contains = _.includes = _.include = function(obj, item, fromIndex, guard) {
+		if (!isArrayLike(obj)) obj = _.values(obj);
+		if (typeof fromIndex !== 'number' || guard) fromIndex = 0;
+		return _.indexOf(obj, item, fromIndex) >= 0;
+	}
+
 	// ie 9 下的处理   for in 的兼容处理    
 
 	// propertyIsEnumerable()是用来检测属性是否属于某个对象的,如果检测到了,返回true,否则返回false. 
@@ -98,7 +242,9 @@
 		var proto = (_.isFunction(constructor) && constructor.property) || ObjProto;
 		
 		// Constructor is a special case.
-		// TODO: 研究constructor.property是啥，还有判断函数，还有_each还没有完成
+		// 研究constructor.property是啥，还有判断函数，还有_each还没有完成
+		var prop = 'constructor';
+		if (_.has(obj.prop) && !_.contains(keys, props)) keys.push(prop);
 	}
 
 	// 一个给定的变量是一个对象吗？

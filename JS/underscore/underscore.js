@@ -77,8 +77,61 @@
 		return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
 	}
 
-	_.isFunction = function(obj) {
-		return typeof obj === 'function' || false;
+	// 如果object是一个对象，返回true。需要注意的是JavaScript空数组和空函数也都是对象，字符串和数字不是。
+	_.isObject = function(obj) {
+		var type = typeof obj;
+		return type === 'function' || type === 'object' && !!obj;
+	};
+
+	// Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp, isError.
+	_.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function(name) {
+		_['is' + name] = function(obj) {
+			return toString.call(obj) === '[object' + name +']';
+		};
+	});
+
+	// Define a fallback version of the method in browsers (ahem, IE < 9), where
+	// there isn't any inspectable "Arguments" type.
+	if (!_.isArguments(arguments)) {
+		_.isArguments = function(obj) {
+			return _.has(obj, 'callee');
+		}
+	}
+
+	// Optimize `isFunction` if appropriate. Work around some typeof bugs in old v8,
+	// IE 11 (#1621), and in Safari 8 (#1929).
+	// Int8Array 对象：8 位整数值的类型化数组。内容将初始化为 0。如果无法分配请求数目的字节，则将引发异常。
+	if (typeof /./ != 'function' && typeof Int8Array != 'object') {
+		_.isFunction = function(obj) {
+			return typeof obj == 'function' || false;
+		}
+	}
+
+	_.isFinite = function(obj) {
+		return isFinite(obj) && !isNaN(parseFloat(obj));
+	}
+
+	// 如果object是 NaN，返回true。 
+  // 注意： 这和原生的isNaN 函数不一样，如果变量是undefined，原生的isNaN 函数也会返回 true 。
+	_.isNaN = function(obj) {
+		return _.isNumber(obj) && obj !== +obj;
+	}
+
+	_.isBoolean = function(obj) {
+		return obj === true || obj === false || toString.call(obj) === '[object Boolean]'; 
+	}
+
+	_.isNull = function(obj) {
+		return obj === null;
+	}
+
+	_.isUndefined = function(obj) {
+		return obj === void 0;
+	}
+
+	_.noConflict = function() {
+		root._ = previousUnderscore;
+		return this;
 	}
 
 	// 告诉你properties中的键和值是否包含在object中
@@ -174,7 +227,7 @@
 	var cb = function(value, context, argCount) {
 		if (value == null) return _.identity;
 		if (_.isFunction(value)) return optimizeCb(value, context, argCount);
-		if(_isObject(value)) return _.matcher(value);
+		if(_isObject = function(obj) (value)) return _.matcher(value);
 		return _.property(value);
 	}
 
@@ -198,11 +251,46 @@
 	_.findIndex = createPredicateIndexFinder(1);
 	_.findLastIndex = createPredicateIndexFinder(-1);
 
+	// 使用二分查找确定value在list中的位置序号，value按此序号插入能保持list原有的排序。
+	// 如果提供iterator函数，iterator将作为list排序的依据，包括你传递的value 。
+	// iterator也可以是字符串的属性名用来排序(比如length)。
+	// _.sortedIndex([10, 20, 30, 40, 50], 35); => 3
+
+	// var stooges = [{name: 'moe', age: 40}, {name: 'curly', age: 60}];
+	// _.sortedIndex(stooges, {name: 'larry', age: 50}, 'age'); => 1
+	_.sortedIndex = function(array, obj, iteratee, context) {
+		iteratee = cb(iteratee, context, 1);
+		var value = iteratee(obj);
+		var low = 0, high = getLength(array);
+		while (low < high) {
+			var mid = Math.floor((low + high) / 2);
+			if (iteratee(array[mid]) < value) low = mid +1; else high = mid;
+		}
+		return low;
+	}
+
 	// Generator function to create the indexOf and lastIndexOf functions
 	function createIndexFinder(dir, predicateFind, sortedIndex) {
 		return function(array, item, idx) {
 			var i = 0, length = getLength(array);
-			// TODO: 
+			if (typeof idx == 'number') {
+				if (dir > 0) {
+					i = idx >= 0 ? idx : Math.max(idx + length, i);
+				} else {
+					length = idx >= 0 ? Math.min(idx + 1, length) : idx + length + 1;
+				}
+			} else if (sortedIndex && idx && length) {
+				idx = sortedIndex(array, item);
+				return array[idx] === item ? idx : -1;
+			}
+			if (item !== item) {
+				idx = predicateFind(slice.call(array, i, length), _.isNaN);
+				return idx >= 0 ? idx + i : -1;
+			}
+			for (idx = dir > 0 ? i : length -1; idx >= 0 && idx < length; idx += dir ) {
+				if (array[idx] === item) return idx;
+			}
+			return -1;
 		}
 	}
 
@@ -267,10 +355,13 @@
 			}
 		} else {
 			var keys = _.keys(obj);
-
+			for (i = 0, length = keys.length; i < length; i++) {
+				iteratee(obj[keys[i]], keys[i], obj);
+			}
 		}
-
 		return obj;
-	}
+	};
+
+	
 
 })(this);

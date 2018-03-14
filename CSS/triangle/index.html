@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>随心所欲的三角形</title>
+  <style>
+    div {
+      width: 200px;
+      height: 60px;
+      background-color: #eee;
+      position: absolute;
+      left: 50%;
+      margin-left: -150px;
+      margin-top: -50px;
+      top: 50%;
+      border-radius: 10px;
+      float: left;
+      font: 12px/20px "微软雅黑";
+      color: #000;
+      padding: 20px 50px;
+    }
+
+    span {
+      position: absolute;
+      top: -20px;
+      width: 0;
+      height: 0;
+      border-width: 0 15px 20px 15px;
+      border-style: solid;
+      border-color: transparent transparent #eee transparent;
+      left: 50%;
+      margin-left: -15px;
+    }
+
+    demo1 {
+      display: inline-block;
+      width: 10px;
+      height: 5px;
+      background: red;
+      line-height: 0;
+      font-size: 0;
+      vertical-align: middle;
+      -webkit-transform: rotate(45deg);
+    }
+
+    demo1:after {
+      content: '/';
+      display: block;
+      width: 20px;
+      height: 5px;
+      background: red;
+      -webkit-transform: rotate(-90deg) translateY(-50%) translateX(50%);
+    }
+
+    demo2 {
+      display: inline-block;
+      width: 20px;
+      height: 5px;
+      background: red;
+      line-height: 0;
+      font-size: 0;
+      vertical-align: middle;
+      -webkit-transform: rotate(45deg);
+    }
+
+    demo2:after {
+      content: '/';
+      display: block;
+      width: 20px;
+      height: 5px;
+      background: red;
+      -webkit-transform: rotate(-90deg);
+    }
+
+    .radius {
+      width: 0;
+      height: 0;
+      transform: rotate(45deg);
+      border-width: 20px;
+      border-color: #000 transparent transparent #000;
+      border-style: solid;
+      border-top-left-radius: 10px;
+    }
+
+    li {
+      position: relative;
+      width: 6rem;
+      height: 2.4rem;
+      line-height: 2.4rem;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      margin-right: 0.8rem;
+      margin-bottom: 0.8rem;
+      border: 1px solid #e6e6e6;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    li::after {
+      visibility:hidden;
+      content: "";
+      width: 0;
+      height: 0;
+      transform: rotate(90deg);
+      border-width: 0.6rem;
+      border-color: #457fcf transparent transparent #457fcf;
+      border-style: solid;
+      border-top-left-radius: 5px;
+      position: absolute;
+      right: -1px;
+      top: -1px;
+    }
+
+    li::before {
+      visibility:hidden;
+      content: "\2714";
+      position: absolute;
+      z-index: 30;
+      right: 1px;
+      top: -15px;
+      color: #fff;
+      font-size: 10px;
+      -webkit-transform: rotate(45deg);
+      transform: rotate(15deg);
+    }
+
+    li.active {
+      border: 1px solid #b5ccec;
+    }
+    li.active::before,
+    li.active::after {
+      visibility: visible;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <span></span>
+    三角形所对方向"width: 0"，反对的方向为三角形高度颜色为三角形颜色，其它两个方向相加为宽度
+  </div>
+  <a href="" class="demo1">faf</a>
+  <a href="" class="demo2">fefef</a>
+  <div class="radius"></div>
+  <li class="active">
+    <i class="iconfont icon-xianjin" style="color: #457fcf"></i>
+    <span>现金</span>
+  </li>
+  <li>
+    <i class="iconfont icon-xianjin" style="color: #457fcf"></i>
+    <span>现金</span>
+  </li>
+</body>
+
+</html>

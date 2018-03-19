@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>多重边框</title>
+  <style>
+    main {
+      padding: 0 10vh;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      align-items: center;
+    }
+    div:nth-of-type(1) {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: #fafafa;
+      margin: 105px 29px;
+      box-shadow: 0 0 0 10px #E8E2D6,0 0 0 20px #E1D9C9,
+                  0 0 0 30px #D9CFBB, 0 0 0 40px #D2C6AE,
+                  0 0 0 50px #CABCA0, 0 0 0 60px #C3B393,
+                  0 0 0 70px #BBA985, 0 0 0 80px #B4A078;
+    }
+    div:nth-of-type(2) {
+      width: 200px; height: 120px;
+      background: #efebe9;
+      border: 5px solid #B4A078;
+      margin-bottom: 20px;
+      outline: #B4A078 dashed 1px;
+      outline-offset: -10px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div></div>
+    <div></div>
+  </main>
+  <h3>
+      outline （轮廓）是绘制于元素周围的一条线，位于边框边缘的外围，可起到突出元素的作用。
+
+      注释：轮廓线不会占据空间，也不一定是矩形。
+      
+      outline 简写属性在一个声明中设置所有的轮廓属性。
+      
+      可以按顺序设置如下属性：
+      
+      outline-color
+      outline-style
+      outline-width
+      如果不设置其中的某个值，也不会出问题，比如 outline:solid #ff0000; 也是允许的。
+  </h3>
+</body>
+</html>

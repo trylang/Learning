@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>半透明边框</title>
+  <style>
+    main {
+      /* width: 100%; */
+      padding: 60px 80px 80px;
+      background: #b4a078;
+    }
+    div {
+      padding: 12px;
+      margin: 20px auto;
+      background: #fff;
+      border: 10px solid hsla(0, 0%, 100%, .5);
+      background-clip: padding-box;
+    }
+    label {
+      color: #f4f0ea;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <input id="pb" type="checkbox" checked/>
+    <label for="pb">padding-box(默认)</label>
+    <div>A paragraph of filler text. La la la de dah de dah de dah de la.</div>
+  </main>
+  <h3>
+      为所有相同的父元素中位于 p 元素之后的所有 ul 元素设置背景：
+
+      p~ul
+      {
+      background:#ff0000;
+      }
+  </h3>
+  <h3>
+      h1 + p {margin-top:50px;}
+      这个选择器读作：“选择紧接在 h1 元素后出现的段落，h1 和 p 元素拥有共同的父元素”。
+  </h3>
+</body>
+</html>
+

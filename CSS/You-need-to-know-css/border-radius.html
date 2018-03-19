@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>边框内圆角</title>
+  <style>
+    main {
+      padding: 60px 80px 80px;
+    }
+    div {
+      width: 209px; 
+      margin: 29px auto;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #f4f0ea;
+    }
+    input {
+      margin-left: calc(50% - 45px);
+    }
+    input:checked ~ div {
+      box-shadow: 0 0 0 6px #b4a078;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <input id="ck" type="checkbox" checked/>
+    <label for="ck">box-shadow</label>
+    <div>A paragraph of filler text. La la la de dah de dah de dah de la.</div>
+  </main>
+  <h3>
+    使用box-shadow，outline实现。
+    我们知道box-shadow是会紧贴border-radius圆角边的，但是，描边outline并不会与圆角边border-radius贴合，我们可以将两者组合，通过box-shadow去填补描边outline所产生的间隙来达到我们想要的效果。
+    关于扩张半径的取值？假设圆角border-radius的半径为r,根据勾股定理，扩张半径的最小值应等于(2−1)r。
+  </h3>
+</body>
+<script>
+    //TODO: 图片没有试
+  </script>
+</html>

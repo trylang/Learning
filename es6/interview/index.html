@@ -9,11 +9,39 @@
 </head>
 
 <body>
+
+
+  <h3>路由</h3>
+  <ul>
+    <li>
+      <a href="#/">turn yellow</a>
+    </li>
+    <li>
+      <a href="#/blue">turn blue</a>
+    </li>
+    <li>
+      <a href="#/green">turn green</a>
+    </li>
+  </ul>
+  <button>back</button>
+
+  <h3>双向数据绑定</h3>
+  <h6>
+    1. 一个input，使用v-model指令 2. 一个button，使用v-click指令 3. 一个h3，使用v-bind指令。
+  </h6>
+  <div id="app">
+    <form>
+      <input type="text" v-model="number">
+      <button type="button" v-click="increment">增加</button>
+    </form>
+    <h3 v-bind="number"></h3>
+  </div>
+
   <h5>
     <a href="https://juejin.im/post/5abb55ee6fb9a028e33b7e0a">面试官:请你实现一个深克隆</a>
   </h5>
 
-
+  
   <h5>
     <a href="https://juejin.im/post/5ac2fb886fb9a028b86e328c">面试官:如何实现一个Event</a>
   </h5>
@@ -28,24 +56,13 @@
     <a href="https://juejin.im/post/5ac61da66fb9a028c71eae1b">面试官: 你了解前端路由吗?</a>
   </h5>
 
-  <h5><a href="https://segmentfault.com/a/1190000014274840">面试题：你能写一个Vue的双向数据绑定吗？</a></h5>
-
-  <ul>
-    <li>
-      <a href="#/">turn yellow</a>
-    </li>
-    <li>
-      <a href="#/blue">turn blue</a>
-    </li>
-    <li>
-      <a href="#/green">turn green</a>
-    </li>
-  </ul>
-  <button>back</button>
-
+  <h5>
+    <a href="https://segmentfault.com/a/1190000014274840">面试题：你能写一个Vue的双向数据绑定吗？</a>
+  </h5>
 </body>
 <!-- <script src="./copy.js"></script> -->
 <!-- <script src="./event.js"></script> -->
-<script src="./router.js"></script>
+<!-- <script src="./router.js"></script> -->
+<script src="./watcher.js"></script>
 
 </html>

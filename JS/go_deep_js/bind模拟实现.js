@@ -51,6 +51,8 @@ function bar2(name, age) {
 var bindFoo2 = bar2.bind2(foo2, 'daisy');
 bindFoo2(23);
 
+//TODO: bind 时指定的 this 值会失效。第三种改进方式以后再研究。
+
 
 
 

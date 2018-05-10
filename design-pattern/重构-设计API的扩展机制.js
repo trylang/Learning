@@ -127,11 +127,11 @@ let valiData = function(arr) {
     }
     // 遍历规则
     for (let j = 0; j < arr[i].rules.length; j++) {
-      // 提取规则
+      // 提取规则（太机智）
       checkRule = arr[i].rules[j].rule.split(':');
-      _rule = checkRule.shift(); // 第一个
-      checkRule.unshift(arr[i].el);
-      checkRule.push(arr[i].rules[j].msg);
+      _rule = checkRule.shift(); // 第一个（checkRule删除掉一个，就剩一个空的数组）
+      checkRule.unshift(arr[i].el); // 然后新的checkoutRule空数组装进去一个el值
+      checkRule.push(arr[i].rules[j].msg); // 再装入一个msg信息
       // 如果规则错误
       ruleMsg = ruleData[_rule].apply(null, checkRule);
       if (ruleMsg) {
@@ -149,3 +149,86 @@ console.info(valiData([
   {el: testData.phone, rules: [{rule: 'isNoNull', msg: '电话不能为空'}, {rule: 'isMobile', msg: '手机号码格式不正确'}]},
   {el: testData.pwd, rules: [{rule: 'isNoNull', msg: '密码不能为空'}, {rule: 'minLength:6', msg: '密码长度不能小于6'}]}
 ]));
+
+
+/** 所以下面应用开放-封闭原则。给函数的校验规则增加扩展性。在实操之前，大家应该会懵，因为一个函数，可以进行校验的操作，又有增加校验规则的操作。
+ *  一个函数做两件事，就违反了单一原则。到时候也难维护，所以推荐的做法就是分接口做。如下写法。 */
+
+
+// 第三版处理，添加新增规则函数
+/** 第二版处理 */
+let valiData3 = function(arr) {
+
+  // 全局规则
+  let ruleData = {
+    /**
+     * @description 
+     * @param {any} val 
+     * @param {any} msg 
+     * @returns 
+     */
+    isMobile(val, msg) {
+      if (!/^1[3-9]\d{9}$/.test(val)) {
+        return msg;
+      }
+    },
+  };
+
+  // 返回处理函数
+  return {
+    /**
+     * @description 查询接口
+     * @param {any} arr 
+     */
+    check: function(arr) {
+      let ruleMsg, checkRule, _rule;
+      for (let i = 0, len = arr.length; i < len; i++) {
+        // 如果字段找不到
+        if (arr[i].el === undefined) {
+          return '字段找不到';
+        }
+        // 遍历规则
+        for (let j = 0; j < arr[i].rules.length; j++) {
+          // 提取规则（太机智）
+          checkRule = arr[i].rules[j].rule.split(':');
+          _rule = checkRule.shift(); // 第一个（checkRule删除掉一个，就剩一个空的数组）
+          checkRule.unshift(arr[i].el); // 然后新的checkoutRule空数组装进去一个el值
+          checkRule.push(arr[i].rules[j].msg); // 再装入一个msg信息
+          // 如果规则错误
+          ruleMsg = ruleData[_rule].apply(null, checkRule);
+          if (ruleMsg) {
+            // 返回错误信息
+            return ruleMsg;
+          }
+        }
+      }
+    },
+
+    /**
+     * @description 
+     * @param {any} type 
+     * @param {any} fn 
+     */
+    addRule: function(type, fn) {
+      ruleData[type] = fn;
+    }
+  };
+
+}();
+
+// 扩展 -- 添加日期范围校验
+valiData3.addRule('isDateRank', function(val, msg) {
+  if (new Date(val[0]).getTime() >= new Date(val[1]).getTime()) {
+    return msg;
+  }
+});
+
+// 校验函数调用 -- 测试新添加的规则-日期范围校验
+console.log(valiData3.check([{
+  el:['2017-8-9 22:00:00','2017-8-8 24:00:00'],
+  rules:[{
+      rule:'isDateRank',msg:'日期范围不正确'
+  }]
+}]));
+
+

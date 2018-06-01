@@ -32,3 +32,13 @@ var hello = function(x) {return 'HELLO, ' + x};
 
 var greet = compose(hello, toUpperCase);
 console.log(greet('kevin'));
+
+
+/** 需求二：输入 'kevin daisy kelly'，返回 'K.D.K' */
+// 非pointfree, 因为提到了数据：name
+var initials_demo = function(name) {
+  return name.split(' ').map(compose(toUpperCase, head)).join('. ');
+};
+
+// pointfree
+// 先定义基本运算

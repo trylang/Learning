@@ -99,28 +99,47 @@ var getIncompleteTaskSummaries = function(membername) {
     })
 }
 
-getIncompleteTaskSummaries('Scott');
+// getIncompleteTaskSummaries('Scott');
 
 // 第二版 pointfree 改写
-var prop = curry3(function(name, obj) {
+var prop = curry6(function(name, obj) {
   return obj[name];
 });
 
-var propEq = curry3(function(name, val, obj) {
+var propEq = curry6(function(name, val, obj) {
   return obj[name] === val;
 });
 
-var filter = curry3(function(fn, arr) {
+var filter = curry6(function(fn, arr) {
   return arr.filter(fn);
 });
 
-var map = curry3(function(args, obj) {
+var map = curry6(function(args, obj) {
   return arr.map(fn);
 });
 
-var pick = curry3(function(args, obj) {
+var pick = curry6(function(args, obj) {
   var result = {};
   for (var i = 0; i < args.length; i++) {
-    
+    result[args[i]] = obj[args[i]]
   }
-})
+  return result;
+});
+
+var sortBy = curry6(function(fn, arr) {
+  return arr.sort(function(a, b) {
+    var a = fn(a),
+        b = fn(b);
+    return a < b ? -1 : a > b ? 1 : 0; // 0 代表 a = b
+  })
+});
+
+var getIncompleteTaskSummaries2 = function(membername) {
+  return fetchData()
+    .then(prop('tasks'))
+    .then(filter(propEq('username', membername)))
+    .then(filter(propEq('complete', false)))
+    .then(data => console.log(22222, data));
+}
+
+getIncompleteTaskSummaries2('Scott')

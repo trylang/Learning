@@ -1,3 +1,6 @@
+
+// https://juejin.im/post/5b19e81de51d454e907bd1c5?utm_source=gold_browser_extension
+
 const Vue = function(options) {
   
 }

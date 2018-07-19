@@ -2,13 +2,17 @@
 const woa = require('./application.js')
 const app = new woa()
 
-app.use((req, res) => {
-  res.writeHead(200)
-  res.end('hello Jane')
+app.use(async ctx => {
+  ctx.body = 'hello woa ' + ctx.url
 })
 
+// app.use((req, res) => {
+//   res.writeHead(200)
+//   res.end('hello Jane')
+// })
+
 app.listen(9092, () => {
-  console.log('server is running')
+  console.log('server is running on' + 9092)
 })
 
 

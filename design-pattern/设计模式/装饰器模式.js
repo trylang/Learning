@@ -3,6 +3,9 @@
  * 1. 介绍：  1》为对象添加新功能；
  *    2》不改变其原有得结构和功能；
  * 2. 场景： ES7装饰器； core-decorators库
+ * 3. 设计原则验证：
+ *    1》将现有对象和装饰器进行分离，两者独立存在
+ *    2》符合开放封闭原则
  */
 
 class Circle {
@@ -71,3 +74,25 @@ function testDec2(isDec) {
 
 // 测试代码
 console.log(Demo.isDec);
+
+
+// 场景二（装饰类和方法）
+function mixins(...list) {
+  return function(target) {
+    Object.assign(target.prototype, ...list);
+  }
+}
+
+const Foo = {
+  foo() {
+    console.log('foo');
+  }
+}
+
+@mixins(Foo)
+class MyClass {
+  // ...
+}
+
+let obj = new MyClass();
+obj.foo(); // MyClass的实例就有了装饰器的函数

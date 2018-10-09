@@ -27,3 +27,4 @@ class Target {
 let target = new Target();
 let res = target.request();
 console.log('适配器模式', res);
+

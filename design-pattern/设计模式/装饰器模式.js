@@ -6,6 +6,8 @@
  * 3. 设计原则验证：
  *    1》将现有对象和装饰器进行分离，两者独立存在
  *    2》符合开放封闭原则
+ * 装饰器不仅可以装饰类的方法还可以装饰类（但是不可以装饰函数，因为函数存在变量提升）
+   装饰器函数接受3个参数 分别是装饰的对象，装饰的属性，装饰属性的描述
  */
 
 class Circle {
@@ -96,3 +98,31 @@ class MyClass {
 
 let obj = new MyClass();
 obj.foo(); // MyClass的实例就有了装饰器的函数
+
+
+
+// 测试
+
+function log(target, name, descriptor) {
+  // target 目标class类；
+  // name 目标class的属性名；
+  // descriptor 目标属性名的 Object.defineProperty 中会用到
+  console.log(target, name, descriptor)
+  let oldValue = descriptor.value;
+  descriptor.value = function() {
+    console.log(`calling ${name} width`, arguments);
+    return oldValue.apply(this, arguments);
+  }
+  return descriptor;
+}
+
+class Math {
+  @log
+  add(a, b) {
+    return a + b;
+  }
+}
+
+let math = new Math();
+const result = math.add(2, 4);
+console.log('result', result);

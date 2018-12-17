@@ -10,6 +10,7 @@ function Promise(func) {
       callbacks.push(fn);
     }
     if (state == "fulfilled") {
+      console.log('fulfilled', 333333)
       // 这里是要解决resolve函数同步代码执行的情况，需要立即执行
       fn(value);
     }
@@ -79,7 +80,6 @@ function Promise2(func) {
 
   // 成功回调方法,拿到了我们业务代码的数据,这是要状态改变为fulfilled,执行resolve时then方法必须注册完成，这时就需要使用setTimeout置于末尾执行
   var resolve = function(newValue) {
-    
     if (newValue instanceof Promise2) {
       // 如果 newValue 是个 Promise，递归执行
       return newValue.then(resolve)
@@ -102,9 +102,9 @@ function Promise2(func) {
 
 
 function getUserId() {
-  return new Promise2(function(resolve) {
-    // resolve(12343343);
-    // return;
+  return new Promise(function(resolve) {
+    resolve(12343343); // 同步时候会直接触发then的调用方法fn(value);
+    return;
     setTimeout(() => {
       resolve(123743);
       console.log(2);
@@ -118,12 +118,14 @@ getUserId()
     return 456;
   })
   .then(value => {
-    return new Promise2(function(resolve) {
-      setTimeout(function() {
-        resolve(98753);
-        console.log(3);
-      }, 0);
-    });
+    console.log(333, value);
+    return 321;
+    // return new Promise2(function(resolve) {
+    //   setTimeout(function() {
+    //     resolve(98753);
+    //     console.log(3);
+    //   }, 0);
+    // });
   })
   .then(job => {
     console.log('job', job)

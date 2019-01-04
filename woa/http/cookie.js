@@ -6,6 +6,7 @@ http.createServer(function(request, response) {
     const html = fs.readFileSync('../index.html', 'utf8')
     response.writeHead(200, {
       'Content-Type': 'text/html',
+      'Set-Cookie': ['id=123; max-age=2', 'key=abc; HttpOnly']
       // 'Content-Security-Policy': 'default-src http: https:'
     })
     response.end(html)

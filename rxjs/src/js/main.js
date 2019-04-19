@@ -12,6 +12,7 @@ import pairwise from 'rxjs/add/operator/pairwise';
 import distinct from 'rxjs/add/operator/distinct';
 import distinctUntilChanged from 'rxjs/add/operator/distinctUntilChanged';
 import scan from 'rxjs/add/operator/scan';
+import { merge } from 'rxjs/operators'
 
 
 import fromEvent from 'rxjs/add/observable/fromEvent';
@@ -31,6 +32,7 @@ export {
   distinct,
   distinctUntilChanged,
   scan,
+  merge,
 
   fromEvent
 };

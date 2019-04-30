@@ -12,6 +12,8 @@ import pairwise from 'rxjs/add/operator/pairwise';
 import distinct from 'rxjs/add/operator/distinct';
 import distinctUntilChanged from 'rxjs/add/operator/distinctUntilChanged';
 import scan from 'rxjs/add/operator/scan';
+import concatAll from 'rxjs/add/operator/concatAll';
+import interval from 'rxjs/observable/interval';
 import { merge } from 'rxjs/operators'
 
 
@@ -33,6 +35,8 @@ export {
   distinctUntilChanged,
   scan,
   merge,
+  concatAll,
+  interval,
 
   fromEvent
 };
